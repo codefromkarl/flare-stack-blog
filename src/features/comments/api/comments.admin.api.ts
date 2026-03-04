@@ -6,23 +6,38 @@ import {
   ModerateCommentInputSchema,
 } from "@/features/comments/comments.schema";
 import * as CommentService from "@/features/comments/comments.service";
-import { adminMiddleware } from "@/lib/middlewares";
+import { err, ok } from "@/lib/error";
+import { hasSession, sessionMiddleware } from "@/lib/middlewares";
 
 // Admin API - Get all comments with filters
 export const getAllCommentsFn = createServerFn()
-  .middleware([adminMiddleware])
+  .middleware([sessionMiddleware])
   .inputValidator(GetAllCommentsInputSchema)
   .handler(async ({ data, context }) => {
-    return await CommentService.getAllComments(context, data);
+    if (!hasSession(context)) {
+      return err({ reason: "UNAUTHENTICATED" });
+    }
+    if (context.session.user.role !== "admin") {
+      return err({ reason: "PERMISSION_DENIED" });
+    }
+
+    return ok(await CommentService.getAllComments(context, data));
   });
 
 // Admin API - Moderate a comment (approve/reject)
 export const moderateCommentFn = createServerFn({
   method: "POST",
 })
-  .middleware([adminMiddleware])
+  .middleware([sessionMiddleware])
   .inputValidator(ModerateCommentInputSchema)
   .handler(async ({ data, context }) => {
+    if (!hasSession(context)) {
+      return err({ reason: "UNAUTHENTICATED" });
+    }
+    if (context.session.user.role !== "admin") {
+      return err({ reason: "PERMISSION_DENIED" });
+    }
+
     return await CommentService.moderateComment(
       context,
       data,
@@ -34,16 +49,30 @@ export const moderateCommentFn = createServerFn({
 export const adminDeleteCommentFn = createServerFn({
   method: "POST",
 })
-  .middleware([adminMiddleware])
+  .middleware([sessionMiddleware])
   .inputValidator(DeleteCommentInputSchema)
   .handler(async ({ data, context }) => {
+    if (!hasSession(context)) {
+      return err({ reason: "UNAUTHENTICATED" });
+    }
+    if (context.session.user.role !== "admin") {
+      return err({ reason: "PERMISSION_DENIED" });
+    }
+
     return await CommentService.adminDeleteComment(context, data);
   });
 
 // Admin API - Get user stats for hover card
 export const getUserStatsFn = createServerFn()
-  .middleware([adminMiddleware])
+  .middleware([sessionMiddleware])
   .inputValidator(GetUserStatsInputSchema)
   .handler(async ({ data, context }) => {
-    return await CommentService.getUserCommentStats(context, data.userId);
+    if (!hasSession(context)) {
+      return err({ reason: "UNAUTHENTICATED" });
+    }
+    if (context.session.user.role !== "admin") {
+      return err({ reason: "PERMISSION_DENIED" });
+    }
+
+    return ok(await CommentService.getUserCommentStats(context, data.userId));
   });

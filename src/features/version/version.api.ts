@@ -1,15 +1,15 @@
 import { createServerFn } from "@tanstack/react-start";
 import * as VersionService from "./version.service";
 import { err } from "@/lib/error";
-import { hasAdminSession, sessionMiddleware } from "@/lib/middlewares";
+import { hasSession, sessionMiddleware } from "@/lib/middlewares";
 
 export const checkUpdateFn = createServerFn()
   .middleware([sessionMiddleware])
   .handler(({ context }) => {
-    if (!hasAdminSession(context)) {
-      if (!context.session) {
-        return err({ reason: "UNAUTHENTICATED" });
-      }
+    if (!hasSession(context)) {
+      return err({ reason: "UNAUTHENTICATED" });
+    }
+    if (context.session.user.role !== "admin") {
       return err({ reason: "PERMISSION_DENIED" });
     }
 
@@ -19,10 +19,10 @@ export const checkUpdateFn = createServerFn()
 export const forceCheckUpdateFn = createServerFn()
   .middleware([sessionMiddleware])
   .handler(({ context }) => {
-    if (!hasAdminSession(context)) {
-      if (!context.session) {
-        return err({ reason: "UNAUTHENTICATED" });
-      }
+    if (!hasSession(context)) {
+      return err({ reason: "UNAUTHENTICATED" });
+    }
+    if (context.session.user.role !== "admin") {
       return err({ reason: "PERMISSION_DENIED" });
     }
 

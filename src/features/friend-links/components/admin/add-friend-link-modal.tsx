@@ -24,25 +24,31 @@ const AddFriendLinkModalInternal = ({
     contactEmail: "",
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!formData.siteName || !formData.siteUrl) return;
-    await create({
-      data: {
-        siteName: formData.siteName,
-        siteUrl: formData.siteUrl,
-        description: formData.description || undefined,
-        logoUrl: formData.logoUrl || undefined,
-        contactEmail: formData.contactEmail || undefined,
+    create(
+      {
+        data: {
+          siteName: formData.siteName,
+          siteUrl: formData.siteUrl,
+          description: formData.description || undefined,
+          logoUrl: formData.logoUrl || undefined,
+          contactEmail: formData.contactEmail || undefined,
+        },
       },
-    });
-    setFormData({
-      siteName: "",
-      siteUrl: "",
-      description: "",
-      logoUrl: "",
-      contactEmail: "",
-    });
-    onClose();
+      {
+        onSuccess: () => {
+          setFormData({
+            siteName: "",
+            siteUrl: "",
+            description: "",
+            logoUrl: "",
+            contactEmail: "",
+          });
+          onClose();
+        },
+      },
+    );
   };
 
   if (!isOpen) return null;

@@ -128,7 +128,11 @@ export function useAdminComments() {
       if (result.error) {
         const reason = result.error.reason;
         switch (reason) {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+
           case "COMMENT_NOT_FOUND":
             throw new Error("评论不存在");
           default: {
@@ -156,7 +160,11 @@ export function useAdminComments() {
       if (result.error) {
         const reason = result.error.reason;
         switch (reason) {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+
           case "COMMENT_NOT_FOUND":
             throw new Error("评论不存在");
           default: {
@@ -177,9 +185,10 @@ export function useAdminComments() {
   });
 
   return {
-    moderate: moderateMutation.mutateAsync,
+    moderate: moderateMutation.mutate,
+    moderateAsync: moderateMutation.mutateAsync,
     isModerating: moderateMutation.isPending,
-    adminDelete: adminDeleteMutation.mutateAsync,
+    adminDelete: adminDeleteMutation.mutate,
     isAdminDeleting: adminDeleteMutation.isPending,
   };
 }

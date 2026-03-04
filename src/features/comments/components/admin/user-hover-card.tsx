@@ -12,7 +12,23 @@ import { formatDate } from "@/lib/utils";
 const userStatsQuery = (userId: string) =>
   queryOptions({
     queryKey: COMMENTS_KEYS.userStats(userId),
-    queryFn: () => getUserStatsFn({ data: { userId } }),
+    queryFn: async () => {
+      const result = await getUserStatsFn({ data: { userId } });
+      if (result.error) {
+        const reason = result.error.reason;
+        switch (reason) {
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可查看");
+          default: {
+            reason satisfies never;
+            throw new Error("未知错误");
+          }
+        }
+      }
+      return result.data;
+    },
     staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
 

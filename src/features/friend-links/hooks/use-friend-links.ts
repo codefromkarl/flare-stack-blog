@@ -43,7 +43,7 @@ export function useFriendLinks() {
   });
 
   return {
-    submit: submitMutation.mutateAsync,
+    submit: submitMutation.mutate,
     isSubmitting: submitMutation.isPending,
   };
 }
@@ -54,6 +54,19 @@ export function useAdminFriendLinks() {
   const createMutation = useMutation({
     mutationFn: async (input: Parameters<typeof createFriendLinkFn>[0]) => {
       const result = await createFriendLinkFn(input);
+      if (result.error) {
+        const reason = result.error.reason;
+        switch (reason) {
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+          default: {
+            reason satisfies never;
+            throw new Error("未知错误");
+          }
+        }
+      }
       return result.data;
     },
     onSuccess: () => {
@@ -67,7 +80,19 @@ export function useAdminFriendLinks() {
     mutationFn: async (input: Parameters<typeof updateFriendLinkFn>[0]) => {
       const result = await updateFriendLinkFn(input);
       if (result.error) {
-        throw new Error("友链不存在");
+        const reason = result.error.reason;
+        switch (reason) {
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+          case "NOT_FOUND":
+            throw new Error("友链不存在");
+          default: {
+            reason satisfies never;
+            throw new Error("未知错误");
+          }
+        }
       }
       return result.data;
     },
@@ -82,7 +107,19 @@ export function useAdminFriendLinks() {
     mutationFn: async (input: Parameters<typeof approveFriendLinkFn>[0]) => {
       const result = await approveFriendLinkFn(input);
       if (result.error) {
-        throw new Error("友链不存在");
+        const reason = result.error.reason;
+        switch (reason) {
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+          case "NOT_FOUND":
+            throw new Error("友链不存在");
+          default: {
+            reason satisfies never;
+            throw new Error("未知错误");
+          }
+        }
       }
       return result.data;
     },
@@ -97,7 +134,19 @@ export function useAdminFriendLinks() {
     mutationFn: async (input: Parameters<typeof rejectFriendLinkFn>[0]) => {
       const result = await rejectFriendLinkFn(input);
       if (result.error) {
-        throw new Error("友链不存在");
+        const reason = result.error.reason;
+        switch (reason) {
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+          case "NOT_FOUND":
+            throw new Error("友链不存在");
+          default: {
+            reason satisfies never;
+            throw new Error("未知错误");
+          }
+        }
       }
       return result.data;
     },
@@ -112,7 +161,19 @@ export function useAdminFriendLinks() {
     mutationFn: async (input: Parameters<typeof deleteFriendLinkFn>[0]) => {
       const result = await deleteFriendLinkFn(input);
       if (result.error) {
-        throw new Error("友链不存在");
+        const reason = result.error.reason;
+        switch (reason) {
+          case "UNAUTHENTICATED":
+            throw new Error("登录状态已失效，请重新登录");
+          case "PERMISSION_DENIED":
+            throw new Error("权限不足，仅管理员可操作");
+          case "NOT_FOUND":
+            throw new Error("友链不存在");
+          default: {
+            reason satisfies never;
+            throw new Error("未知错误");
+          }
+        }
       }
       return result.data;
     },
@@ -124,15 +185,17 @@ export function useAdminFriendLinks() {
   });
 
   return {
-    create: createMutation.mutateAsync,
+    create: createMutation.mutate,
     isCreating: createMutation.isPending,
-    update: updateMutation.mutateAsync,
+    update: updateMutation.mutate,
     isUpdating: updateMutation.isPending,
-    approve: approveMutation.mutateAsync,
+    approve: approveMutation.mutate,
+    approveAsync: approveMutation.mutateAsync,
     isApproving: approveMutation.isPending,
-    reject: rejectMutation.mutateAsync,
+    reject: rejectMutation.mutate,
+    rejectAsync: rejectMutation.mutateAsync,
     isRejecting: rejectMutation.isPending,
-    adminDelete: deleteMutation.mutateAsync,
+    adminDelete: deleteMutation.mutate,
     isAdminDeleting: deleteMutation.isPending,
   };
 }

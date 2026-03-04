@@ -15,12 +15,6 @@ export function hasSession(context: SessionContext): context is AuthContext {
   return context.session !== null;
 }
 
-export function hasAdminSession(
-  context: SessionContext,
-): context is AuthContext {
-  return context.session !== null && context.session.user.role === "admin";
-}
-
 /* ======================= Infrastructure ====================== */
 
 export const dbMiddleware = createMiddleware({ type: "function" }).server(
