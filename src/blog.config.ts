@@ -4,7 +4,7 @@ export const blogConfig = {
   title: "CodeFromKarl",
   author: "Karl",
   description:
-    "Karl 的个人博客，分享技术与生活。欢迎阅读！",
+    "Karl \u7684\u4e2a\u4eba\u535a\u5ba2\uff0c\u5206\u4eab\u6280\u672f\u4e0e\u751f\u6d3b\u3002\u6b22\u8fce\u9605\u8bfb\uff01",
   social: [
     { platform: "github", url: "https://github.com/codefromkarl" },
     { platform: "email", url: "mailto:1069123094@qq.com" },
