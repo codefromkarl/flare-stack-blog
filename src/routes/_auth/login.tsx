@@ -6,6 +6,7 @@ import {
 import theme from "@theme";
 import { z } from "zod";
 import { Turnstile, useTurnstile } from "@/components/common/turnstile";
+import { resolveLoginRedirectTo } from "@/features/auth/hooks/resolve-login-redirect-to";
 import { useLoginForm, useSocialLogin } from "@/features/auth/hooks";
 import { m } from "@/paraglide/messages";
 
@@ -34,17 +35,10 @@ function RouteComponent() {
     turnstileProps,
   } = useTurnstile("login");
 
-  const currentSearchParams = new URLSearchParams(
-    new URL(location.href, window.location.origin).search,
-  );
-  const isOAuthAuthorizationRequest =
-    !!currentSearchParams.get("client_id") &&
-    !!currentSearchParams.get("response_type");
-
-  let resolvedRedirectTo = search.redirectTo;
-  if (!resolvedRedirectTo && isOAuthAuthorizationRequest) {
-    resolvedRedirectTo = `/oauth/consent?${currentSearchParams.toString()}`;
-  }
+  const resolvedRedirectTo = resolveLoginRedirectTo({
+    redirectTo: search.redirectTo,
+    locationSearch: location.search,
+  });
 
   const loginForm = useLoginForm({
     turnstileToken,

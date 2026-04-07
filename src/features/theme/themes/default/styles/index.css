@@ -7,28 +7,28 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 40 20% 97%;
+    --foreground: 220 8% 12%;
 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 40 14% 93%;
+    --muted-foreground: 220 6% 38%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover: 40 20% 98%;
+    --popover-foreground: 220 8% 12%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
+    --border: 220 10% 90%;
+    --input: 220 10% 90%;
 
-    --primary: 240 10% 3.9%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 220 12% 22%;
+    --primary-foreground: 40 20% 98%;
 
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary: 40 14% 93%;
+    --secondary-foreground: 220 8% 18%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 200 22% 92%;
+    --accent-foreground: 210 10% 22%;
 
-    --ring: 240 10% 3.9%;
+    --ring: 220 8% 45%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -44,28 +44,28 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 220 10% 8%;
+    --foreground: 40 10% 92%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 220 8% 14%;
+    --muted-foreground: 40 8% 68%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 9% 10%;
+    --popover-foreground: 40 10% 92%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 220 8% 24%;
+    --input: 220 8% 24%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 10% 3.9%;
+    --primary: 40 10% 92%;
+    --primary-foreground: 220 10% 8%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 220 8% 16%;
+    --secondary-foreground: 40 10% 88%;
 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 205 12% 22%;
+    --accent-foreground: 40 10% 92%;
 
-    --ring: 240 4.9% 83.9%;
+    --ring: 40 8% 70%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -76,8 +76,8 @@
     --info: 217.2 91.2% 59.8%;
     --info-foreground: 0 0% 100%;
 
-    --selection: 0 0% 100%;
-    --selection-foreground: 240 10% 3.9%;
+    --selection: 210 14% 85%;
+    --selection-foreground: 220 10% 12%;
   }
 }
 
@@ -131,12 +131,16 @@ mark {
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground overflow-x-hidden font-sans antialiased;
     transition:
       background-color 0.5s ease-in-out,
       color 0.5s ease-in-out;
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
   ::selection {

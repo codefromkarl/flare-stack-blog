@@ -1,6 +1,5 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { Search, UserIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { NavOption, UserInfo } from "@/features/theme/contract/layouts";
@@ -20,30 +19,15 @@ export function Navbar({
   isLoading,
 }: NavbarProps) {
   const { siteConfig } = useRouteContext({ from: "__root__" });
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-40 flex items-center transition-all duration-500 ${
-          isScrolled
-            ? "bg-background/80 backdrop-blur-md border-b border-border/40 py-4 shadow-sm"
-            : "bg-transparent border-transparent py-8"
-        }`}
-      >
+      <header className="relative z-40 py-6">
         <div className="max-w-3xl mx-auto w-full px-6 md:px-0 flex items-center justify-between">
           {/* Left: Brand */}
           <Link to="/" className="group select-none">
             <span className="font-serif text-xl font-bold tracking-tighter text-foreground transition-colors group-hover:text-muted-foreground">
-              [ {siteConfig.theme.default.navBarName} ]
+              {siteConfig.theme.default.navBarName}
             </span>
           </Link>
 
@@ -53,7 +37,7 @@ export function Navbar({
               <Link
                 key={option.id}
                 to={option.to}
-                className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors"
+                className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground/65 hover:text-slate-500 dark:hover:text-slate-300 transition-colors"
                 activeProps={{
                   className: "!text-foreground",
                 }}
@@ -92,7 +76,7 @@ export function Navbar({
                       <>
                         <Link
                           to="/profile"
-                          className="w-7 h-7 rounded-full overflow-hidden ring-1 ring-border hover:ring-foreground transition-all relative z-10"
+                          className="w-7 h-7 rounded-full overflow-hidden border border-border/60 hover:border-border transition-colors relative z-10"
                           style={{ viewTransitionName: "user-avatar" }}
                         >
                           {user.image ? (
@@ -136,7 +120,6 @@ export function Navbar({
           </div>
         </div>
       </header>
-      <div className="h-32"></div>
     </>
   );
 }

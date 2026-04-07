@@ -2,6 +2,7 @@ import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AssetUploadField } from "@/features/config/components/asset-upload-field";
+import { NavigationMenuEditor } from "@/features/config/components/navigation-menu-editor";
 import { Field } from "@/features/config/components/site-settings-fields";
 import { SocialLinksEditor } from "@/features/config/components/social-links-editor";
 import { DefaultThemeSettings } from "@/features/config/components/themes/default-theme-settings";
@@ -97,6 +98,15 @@ export function SiteSettingsSection() {
       >
         <div className="md:col-span-2">
           <SocialLinksEditor />
+        </div>
+      </SectionShell>
+
+      <SectionShell
+        title={m.settings_site_section_navigation_title()}
+        description={m.settings_site_section_navigation_desc()}
+      >
+        <div className="md:col-span-2">
+          <NavigationMenuEditor />
         </div>
       </SectionShell>
 

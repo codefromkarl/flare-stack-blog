@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Clock, FileText, Pencil } from "lucide-react";
 import { Suspense } from "react";
 import type { PostPageProps } from "@/features/theme/contract/pages";
-import { FuwariCommentSection } from "@/features/theme/themes/fuwari/components/comments/view/comment-section";
+import { DeferredCommentSection } from "@/features/theme/themes/fuwari/components/comments/view/deferred-comment-section";
 import { ContentRenderer } from "@/features/theme/themes/fuwari/components/content/content-renderer";
 import { authClient } from "@/lib/auth/auth.client";
 import { m } from "@/paraglide/messages";
@@ -118,7 +118,7 @@ export function PostPage({ post }: PostPageProps) {
         className="fuwari-card-base p-6 fuwari-onload-animation"
         style={{ animationDelay: "450ms" }}
       >
-        <FuwariCommentSection postId={post.id} />
+        <DeferredCommentSection postId={post.id} />
       </div>
     </div>
   );

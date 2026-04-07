@@ -28,4 +28,47 @@ export const blogConfig = {
       primaryHue: 250,
     },
   },
+  navigation: {
+    main: [
+      { id: "home", title: "主页", type: "internal", to: "/", visible: true },
+      {
+        id: "posts",
+        title: "文章",
+        type: "internal",
+        to: "/posts",
+        visible: true,
+      },
+      {
+        id: "lab",
+        title: "实验室",
+        type: "internal",
+        to: "/lab",
+        visible: true,
+      },
+      {
+        id: "tech-stack",
+        title: "技术栈",
+        type: "internal",
+        to: "/tech-stack",
+        visible: true,
+      },
+    ],
+    postsIndex: [
+      { id: "home", title: "主页", type: "internal", to: "/", visible: true },
+      {
+        id: "posts",
+        title: "文章",
+        type: "internal",
+        to: "/posts",
+        visible: true,
+      },
+      {
+        id: "links",
+        title: "友链",
+        type: "internal",
+        to: "/friend-links",
+        visible: true,
+      },
+    ],
+  },
 } as const satisfies SiteConfig;

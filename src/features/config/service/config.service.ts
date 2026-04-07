@@ -7,6 +7,7 @@ import {
   SystemConfigSchema,
 } from "@/features/config/config.schema";
 import * as ConfigRepo from "@/features/config/data/config.data";
+import type { NavigationMenuItem } from "@/features/config/site-config.schema";
 import { FullSiteConfigSchema } from "@/features/config/site-config.schema";
 import type { SocialLink } from "@/features/config/utils/social-platforms";
 import * as Storage from "@/features/media/data/media.storage";
@@ -66,6 +67,10 @@ export function resolveSiteConfig(
   config: SystemConfig | null | undefined,
 ): SiteConfig {
   const configDefaultBackground = config?.site?.theme?.default?.background;
+  const normalizeMenuTree = (
+    menu: Array<NavigationMenuItem> | undefined,
+    fallback: Array<NavigationMenuItem>,
+  ) => (menu && menu.length > 0 ? menu : fallback);
 
   return FullSiteConfigSchema.parse({
     title: config?.site?.title ?? blogConfig.title,
@@ -113,6 +118,14 @@ export function resolveSiteConfig(
           config?.site?.theme?.fuwari?.primaryHue ??
           blogConfig.theme.fuwari.primaryHue,
       },
+    },
+    navigation: {
+      main: normalizeMenuTree(config?.site?.navigation?.main, [
+        ...blogConfig.navigation.main,
+      ]),
+      postsIndex: normalizeMenuTree(config?.site?.navigation?.postsIndex, [
+        ...blogConfig.navigation.postsIndex,
+      ]),
     },
   });
 }

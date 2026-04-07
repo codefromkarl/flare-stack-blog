@@ -6,6 +6,7 @@ import type {
   UserLayoutProps,
 } from "./layouts";
 import type {
+  AboutPageProps,
   ForgotPasswordPageProps,
   FriendLinksPageProps,
   HomePageProps,
@@ -17,6 +18,7 @@ import type {
   ResetPasswordPageProps,
   SearchPageProps,
   SubmitFriendLinkPageProps,
+  TechStackPageProps,
   VerifyEmailPageProps,
 } from "./pages";
 
@@ -81,6 +83,12 @@ export interface ThemeComponents {
 
   /** 邮箱验证页组件 */
   VerifyEmailPage: React.ComponentType<VerifyEmailPageProps>;
+
+  /** 关于页组件 */
+  AboutPage: React.ComponentType<AboutPageProps>;
+
+  /** 技术栈页组件 */
+  TechStackPage: React.ComponentType<TechStackPageProps>;
 
   /** 个人资料页组件 */
   ProfilePage: React.ComponentType<ProfilePageProps>;

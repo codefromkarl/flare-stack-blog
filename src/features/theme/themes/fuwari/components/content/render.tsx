@@ -1,13 +1,13 @@
 import type { JSONContent } from "@tiptap/react";
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
 import { MathFormula } from "@/components/content/math-formula";
-import { extensions } from "@/features/posts/editor/config";
+import { staticExtensions } from "@/features/posts/editor/static-extensions";
 import { CodeBlock } from "@/features/theme/themes/fuwari/components/content/code-block";
 import { ImageDisplay } from "@/features/theme/themes/fuwari/components/content/image-display";
 
 export function renderReact(content: JSONContent) {
   return renderToReactElement({
-    extensions,
+    extensions: staticExtensions,
     content,
     options: {
       nodeMapping: {

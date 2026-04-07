@@ -32,8 +32,8 @@ export function PublicLayout({
         user={user}
         logout={logout}
       />
-      <main className="flex-1">{children}</main>
-      <Footer navOptions={navOptions} />
+      <main className="flex-1 px-3 sm:px-5 lg:px-8">{children}</main>
+      <Footer />
     </div>
   );
 }

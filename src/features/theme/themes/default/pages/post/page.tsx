@@ -8,7 +8,7 @@ import { ContentRenderer } from "@/features/theme/themes/default/components/cont
 import { authClient } from "@/lib/auth/auth.client";
 import { formatDate } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
-import { CommentSection } from "../../components/comments/view/comment-section";
+import { DeferredCommentSection } from "../../components/comments/view/deferred-comment-section";
 import { RelatedPosts, RelatedPostsSkeleton } from "./components/related-posts";
 import TableOfContents from "./components/table-of-contents";
 
@@ -164,7 +164,7 @@ export function PostPage({ post }: PostPageProps) {
 
         {/* Comments Section */}
         <div className="pt-12 border-t-0 border-border/40">
-          <CommentSection postId={post.id} />
+          <DeferredCommentSection postId={post.id} />
         </div>
       </article>
 

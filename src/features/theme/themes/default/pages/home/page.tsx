@@ -5,7 +5,6 @@ import {
   resolveSocialHref,
   SOCIAL_PLATFORMS,
 } from "@/features/config/utils/social-platforms";
-import { useViewCounts } from "@/features/pageview/queries";
 import type { HomePageProps } from "@/features/theme/contract/pages";
 import { PostItem } from "@/features/theme/themes/default/components/post-item";
 import { m } from "@/paraglide/messages";
@@ -27,36 +26,21 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
     return merged;
   }, [posts, pinnedPosts]);
 
-  const allSlugs = useMemo(
-    () => displayPosts.map((p) => p.slug),
-    [displayPosts],
-  );
-  const { data: viewCounts, isPending: isPendingViewCounts } =
-    useViewCounts(allSlugs);
-
   return (
     <div className="flex flex-col w-full max-w-3xl mx-auto px-6 md:px-0 py-12 md:py-20 space-y-20">
       {/* Intro Section */}
       <section className="space-y-8">
         <header className="space-y-6">
           <h1 className="text-4xl md:text-5xl font-serif font-medium tracking-tight text-foreground flex items-center gap-4">
-            {m.home_greeting()}{" "}
-            <span className="animate-wave origin-[70%_70%]">👋</span>
+            Hi，我是{siteConfig.author} ✨
           </h1>
 
-          <div className="space-y-4 max-w-2xl text-base md:text-lg text-muted-foreground font-light leading-relaxed">
-            <p>
-              {m.home_intro_prefix()}{" "}
-              <span className="text-foreground font-medium">
-                {siteConfig.author}
-              </span>
-              {m.home_intro_separator()}
-              {siteConfig.description}
-            </p>
+          <div className="space-y-4 max-w-2xl text-base md:text-lg text-muted-foreground font-light leading-[1.7]">
+            <p>{siteConfig.description}</p>
           </div>
         </header>
 
-        <div className="flex items-center gap-6 text-muted-foreground">
+        <div className="flex items-center gap-5 text-muted-foreground/80">
           {siteConfig.social
             .filter((link) => link.url)
             .map((link, i) => {
@@ -78,9 +62,13 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
                   aria-label={label}
                 >
                   {Icon ? (
-                    <Icon size={20} strokeWidth={1.5} />
+                    <Icon size={18} strokeWidth={1.5} />
                   ) : (
-                    <img src={link.icon} alt={label} className="w-5 h-5" />
+                    <img
+                      src={link.icon}
+                      alt={label}
+                      className="w-[18px] h-[18px] opacity-80"
+                    />
                   )}
                 </a>
               );
@@ -90,19 +78,13 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
 
       {/* Selected Posts */}
       <section className="space-y-10">
-        <h2 className="text-xl font-serif font-medium text-foreground tracking-tight flex items-center gap-2">
+        <h2 className="text-xl font-medium text-foreground/90 tracking-tight flex items-center gap-2">
           {m.home_latest_posts()}
         </h2>
 
         <div className="space-y-8">
           {displayPosts.map((post) => (
-            <PostItem
-              key={post.id}
-              post={post}
-              pinned={post.isPinned}
-              views={viewCounts?.[post.slug]}
-              isLoadingViews={isPendingViewCounts}
-            />
+            <PostItem key={post.id} post={post} pinned={post.isPinned} />
           ))}
         </div>
 

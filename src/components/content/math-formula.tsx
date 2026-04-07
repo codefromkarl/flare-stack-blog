@@ -1,5 +1,7 @@
 import katex from "katex";
-import { memo } from "react";
+import { memo, useEffect } from "react";
+
+let cssLoaded = false;
 
 export type MathFormulaMode = "inline" | "block";
 
@@ -12,6 +14,15 @@ export const MathFormula = memo(function MathFormula({
   latex,
   mode = "inline",
 }: MathFormulaProps) {
+  useEffect(() => {
+    if (cssLoaded) return;
+    cssLoaded = true;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/katex.min.css";
+    document.head.appendChild(link);
+  }, []);
+
   if (!latex.trim()) return null;
 
   const displayMode = mode === "block";

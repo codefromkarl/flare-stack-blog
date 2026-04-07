@@ -9,6 +9,20 @@ import type { Locale } from "@/lib/i18n";
 import { m } from "@/paraglide/messages";
 import { getLocale } from "@/paraglide/runtime";
 
+function buildTrustedOrigins(baseUrl: string) {
+  const trustedOrigins = new Set<string>();
+  const base = new URL(baseUrl);
+  trustedOrigins.add(base.origin);
+
+  if (base.hostname === "localhost") {
+    trustedOrigins.add(`${base.protocol}//127.0.0.1${base.port ? `:${base.port}` : ""}`);
+  } else if (base.hostname === "127.0.0.1") {
+    trustedOrigins.add(`${base.protocol}//localhost${base.port ? `:${base.port}` : ""}`);
+  }
+
+  return [...trustedOrigins];
+}
+
 async function checkEmailRateLimit(
   env: Env,
   scope: string,
@@ -134,6 +148,7 @@ export function getAuth({ db, env }: { db: DB; env: Env }) {
     },
     secret: BETTER_AUTH_SECRET,
     baseURL: BETTER_AUTH_URL,
+    trustedOrigins: buildTrustedOrigins(BETTER_AUTH_URL),
   });
 }
 

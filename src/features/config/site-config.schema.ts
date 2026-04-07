@@ -17,6 +17,32 @@ export const DEFAULT_THEME_TRANSITION_MIN = 0;
 export const DEFAULT_THEME_TRANSITION_MAX = 1500;
 export const FUWARI_THEME_HUE_MIN = 0;
 export const FUWARI_THEME_HUE_MAX = 360;
+export const NAVIGATION_MENU_MAX_DEPTH = 2;
+export const NAV_MENU_ITEM_TYPES = ["internal", "external", "anchor"] as const;
+export const NAV_MENU_ACCESS_TYPES = [
+  "public",
+  "authenticated",
+  "admin",
+] as const;
+export type NavMenuItemType = (typeof NAV_MENU_ITEM_TYPES)[number];
+export type NavMenuAccessType = (typeof NAV_MENU_ACCESS_TYPES)[number];
+
+export interface NavigationMenuItem {
+  id: string;
+  title: string;
+  type: NavMenuItemType;
+  access?: NavMenuAccessType;
+  to?: string;
+  url?: string;
+  anchorId?: string;
+  visible?: boolean;
+  children?: Array<NavigationMenuItem>;
+}
+
+export interface NavigationConfig {
+  main: Array<NavigationMenuItem>;
+  postsIndex: Array<NavigationMenuItem>;
+}
 
 function createSiteTextSchema(max: number) {
   return z.string().trim().max(max);
@@ -27,6 +53,24 @@ function createSiteTextFormSchema(max: number, messages: Messages) {
     .string()
     .trim()
     .max(max, messages.settings_site_validation_too_long({ max }));
+}
+
+function createUrlFormSchema(messages: Messages) {
+  return z
+    .string()
+    .trim()
+    .refine((value) => value === "" || value.startsWith("http"), {
+      message: messages.settings_nav_validation_invalid_url(),
+    });
+}
+
+function createUrlSchema() {
+  return z
+    .string()
+    .trim()
+    .refine((value) => value === "" || value.startsWith("http"), {
+      message: "Please enter a valid http(s) URL",
+    });
 }
 
 function createAssetRefSchema() {
@@ -270,6 +314,144 @@ function createFuwariThemeSiteConfigInputFormSchema(messages: Messages) {
   });
 }
 
+function validateNavigationMenuItem(
+  item: NavigationMenuItem,
+  ctx: z.RefinementCtx,
+  messages?: {
+    toRequired: string;
+    urlRequired: string;
+    anchorRequired: string;
+  },
+) {
+  if (item.type === "internal" && !item.to) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: messages?.toRequired ?? "Internal menu item requires `to`",
+      path: ["to"],
+    });
+  }
+  if (item.type === "external" && !item.url) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: messages?.urlRequired ?? "External menu item requires `url`",
+      path: ["url"],
+    });
+  }
+  if (item.type === "anchor" && !item.anchorId) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message:
+        messages?.anchorRequired ?? "Anchor menu item requires `anchorId`",
+      path: ["anchorId"],
+    });
+  }
+}
+
+function createNavigationMenuItemLeafSchema() {
+  return z
+    .object({
+      id: createSiteTextSchema(80),
+      title: createSiteTextSchema(80),
+      type: z.enum(NAV_MENU_ITEM_TYPES),
+      access: z.enum(NAV_MENU_ACCESS_TYPES).optional(),
+      to: z.string().trim().optional(),
+      url: createUrlSchema().optional(),
+      anchorId: createSiteTextSchema(120).optional(),
+      visible: z.boolean().optional(),
+      children: z.array(z.never()).optional(),
+    })
+    .superRefine((item, ctx) => {
+      validateNavigationMenuItem(item as NavigationMenuItem, ctx);
+    });
+}
+
+function createNavigationMenuItemSchema() {
+  return z
+    .object({
+      id: createSiteTextSchema(80),
+      title: createSiteTextSchema(80),
+      type: z.enum(NAV_MENU_ITEM_TYPES),
+      access: z.enum(NAV_MENU_ACCESS_TYPES).optional(),
+      to: z.string().trim().optional(),
+      url: createUrlSchema().optional(),
+      anchorId: createSiteTextSchema(120).optional(),
+      visible: z.boolean().optional(),
+      children: z.array(createNavigationMenuItemLeafSchema()).optional(),
+    })
+    .superRefine((item, ctx) => {
+      validateNavigationMenuItem(item as NavigationMenuItem, ctx);
+    });
+}
+
+function createNavigationMenuItemLeafFormSchema(messages: Messages) {
+  return z
+    .object({
+      id: createSiteTextFormSchema(80, messages),
+      title: createSiteTextFormSchema(80, messages),
+      type: z.enum(NAV_MENU_ITEM_TYPES),
+      access: z.enum(NAV_MENU_ACCESS_TYPES).optional(),
+      to: z.string().trim().optional(),
+      url: createUrlFormSchema(messages).optional(),
+      anchorId: createSiteTextFormSchema(120, messages).optional(),
+      visible: z.boolean().optional(),
+      children: z.array(z.never()).optional(),
+    })
+    .superRefine((item, ctx) => {
+      validateNavigationMenuItem(item as NavigationMenuItem, ctx, {
+        toRequired: messages.settings_nav_validation_to_required(),
+        urlRequired: messages.settings_nav_validation_url_required(),
+        anchorRequired: messages.settings_nav_validation_anchor_required(),
+      });
+    });
+}
+
+function createNavigationMenuItemFormSchema(messages: Messages) {
+  return z
+    .object({
+      id: createSiteTextFormSchema(80, messages),
+      title: createSiteTextFormSchema(80, messages),
+      type: z.enum(NAV_MENU_ITEM_TYPES),
+      access: z.enum(NAV_MENU_ACCESS_TYPES).optional(),
+      to: z.string().trim().optional(),
+      url: createUrlFormSchema(messages).optional(),
+      anchorId: createSiteTextFormSchema(120, messages).optional(),
+      visible: z.boolean().optional(),
+      children: z
+        .array(createNavigationMenuItemLeafFormSchema(messages))
+        .optional(),
+    })
+    .superRefine((item, ctx) => {
+      validateNavigationMenuItem(item as NavigationMenuItem, ctx, {
+        toRequired: messages.settings_nav_validation_to_required(),
+        urlRequired: messages.settings_nav_validation_url_required(),
+        anchorRequired: messages.settings_nav_validation_anchor_required(),
+      });
+    });
+}
+
+function createNavigationConfigSchema() {
+  return z.object({
+    main: z.array(createNavigationMenuItemSchema()),
+    postsIndex: z.array(createNavigationMenuItemSchema()),
+  });
+}
+
+function createNavigationConfigInputSchema() {
+  return z.object({
+    main: z.array(createNavigationMenuItemSchema()).optional(),
+    postsIndex: z.array(createNavigationMenuItemSchema()).optional(),
+  });
+}
+
+function createNavigationConfigInputFormSchema(messages: Messages) {
+  return z.object({
+    main: z.array(createNavigationMenuItemFormSchema(messages)).optional(),
+    postsIndex: z
+      .array(createNavigationMenuItemFormSchema(messages))
+      .optional(),
+  });
+}
+
 export const defaultThemeBackgroundSchema =
   createDefaultThemeBackgroundSchema();
 export const defaultThemeBackgroundInputSchema =
@@ -281,6 +463,9 @@ export const defaultThemeSiteConfigInputSchema =
 export const fuwariThemeSiteConfigSchema = createFuwariThemeSiteConfigSchema();
 export const fuwariThemeSiteConfigInputSchema =
   createFuwariThemeSiteConfigInputSchema();
+export const navigationMenuItemSchema = createNavigationMenuItemSchema();
+export const navigationConfigSchema = createNavigationConfigSchema();
+export const navigationConfigInputSchema = createNavigationConfigInputSchema();
 
 export const FullSiteConfigSchema = z.object({
   title: createSiteTextSchema(120),
@@ -299,6 +484,7 @@ export const FullSiteConfigSchema = z.object({
     default: defaultThemeSiteConfigSchema,
     fuwari: fuwariThemeSiteConfigSchema,
   }),
+  navigation: navigationConfigSchema,
 });
 
 export function createSiteConfigInputFormSchema(messages: Messages) {
@@ -324,6 +510,7 @@ export function createSiteConfigInputFormSchema(messages: Messages) {
         fuwari: createFuwariThemeSiteConfigInputFormSchema(messages).optional(),
       })
       .optional(),
+    navigation: createNavigationConfigInputFormSchema(messages).optional(),
   });
 }
 
@@ -348,6 +535,7 @@ export const SiteConfigInputSchema = z.object({
       fuwari: fuwariThemeSiteConfigInputSchema.optional(),
     })
     .optional(),
+  navigation: navigationConfigInputSchema.optional(),
 });
 
 export const SiteConfigSchema = SiteConfigInputSchema;

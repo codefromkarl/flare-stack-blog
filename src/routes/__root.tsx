@@ -10,6 +10,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import theme from "@theme";
 import { ThemeProvider } from "@/components/common/theme-provider";
 import { siteConfigQuery } from "@/features/config/queries";
+import { useWebVitals } from "@/hooks/use-web-vitals";
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import { clientEnv } from "@/lib/env/client.env";
 import { getLocale } from "@/paraglide/runtime";
@@ -49,6 +50,24 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         },
       ],
       links: [
+        {
+          rel: "dns-prefetch",
+          href: "//fonts.googleapis.com",
+        },
+        {
+          rel: "dns-prefetch",
+          href: "//fonts.gstatic.com",
+        },
+        {
+          rel: "preconnect",
+          href: "//fonts.googleapis.com",
+          crossOrigin: "anonymous",
+        },
+        {
+          rel: "preconnect",
+          href: "//fonts.gstatic.com",
+          crossOrigin: "anonymous",
+        },
         {
           rel: "icon",
           type: "image/svg+xml",
@@ -114,6 +133,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootDocument({ children }: { children: React.ReactNode }) {
   const locale = getLocale();
   const { siteConfig } = useRouteContext({ from: "__root__" });
+  useWebVitals();
 
   return (
     <html
@@ -126,18 +146,20 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
+        {import.meta.env.DEV && (
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[
+              {
+                name: "Tanstack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
+        )}
         <Scripts />
       </body>
     </html>

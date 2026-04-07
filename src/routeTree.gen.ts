@@ -19,9 +19,12 @@ import { Route as OauthConsentRouteImport } from './routes/oauth/consent'
 import { Route as UserSubmitFriendLinkRouteImport } from './routes/_user/submit-friend-link'
 import { Route as UserProfileRouteImport } from './routes/_user/profile'
 import { Route as PublicUnsubscribeRouteImport } from './routes/_public/unsubscribe'
+import { Route as PublicTechStackRouteImport } from './routes/_public/tech-stack'
 import { Route as PublicSearchRouteImport } from './routes/_public/search'
 import { Route as PublicPostsRouteImport } from './routes/_public/posts'
+import { Route as PublicLabRouteImport } from './routes/_public/lab'
 import { Route as PublicFriendLinksRouteImport } from './routes/_public/friend-links'
+import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as AuthVerifyEmailRouteImport } from './routes/_auth/verify-email'
 import { Route as AuthResetLinkRouteImport } from './routes/_auth/reset-link'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
@@ -84,6 +87,11 @@ const PublicUnsubscribeRoute = PublicUnsubscribeRouteImport.update({
   path: '/unsubscribe',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicTechStackRoute = PublicTechStackRouteImport.update({
+  id: '/tech-stack',
+  path: '/tech-stack',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicSearchRoute = PublicSearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -94,9 +102,19 @@ const PublicPostsRoute = PublicPostsRouteImport.update({
   path: '/posts',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicLabRoute = PublicLabRouteImport.update({
+  id: '/lab',
+  path: '/lab',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicFriendLinksRoute = PublicFriendLinksRouteImport.update({
   id: '/friend-links',
   path: '/friend-links',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicAboutRoute = PublicAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
@@ -178,9 +196,12 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthRegisterRoute
   '/reset-link': typeof AuthResetLinkRoute
   '/verify-email': typeof AuthVerifyEmailRoute
+  '/about': typeof PublicAboutRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/lab': typeof PublicLabRoute
   '/posts': typeof PublicPostsRoute
   '/search': typeof PublicSearchRoute
+  '/tech-stack': typeof PublicTechStackRoute
   '/unsubscribe': typeof PublicUnsubscribeRoute
   '/profile': typeof UserProfileRoute
   '/submit-friend-link': typeof UserSubmitFriendLinkRoute
@@ -202,9 +223,12 @@ export interface FileRoutesByTo {
   '/register': typeof AuthRegisterRoute
   '/reset-link': typeof AuthResetLinkRoute
   '/verify-email': typeof AuthVerifyEmailRoute
+  '/about': typeof PublicAboutRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/lab': typeof PublicLabRoute
   '/posts': typeof PublicPostsRoute
   '/search': typeof PublicSearchRoute
+  '/tech-stack': typeof PublicTechStackRoute
   '/unsubscribe': typeof PublicUnsubscribeRoute
   '/profile': typeof UserProfileRoute
   '/submit-friend-link': typeof UserSubmitFriendLinkRoute
@@ -232,9 +256,12 @@ export interface FileRoutesById {
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-link': typeof AuthResetLinkRoute
   '/_auth/verify-email': typeof AuthVerifyEmailRoute
+  '/_public/about': typeof PublicAboutRoute
   '/_public/friend-links': typeof PublicFriendLinksRoute
+  '/_public/lab': typeof PublicLabRoute
   '/_public/posts': typeof PublicPostsRoute
   '/_public/search': typeof PublicSearchRoute
+  '/_public/tech-stack': typeof PublicTechStackRoute
   '/_public/unsubscribe': typeof PublicUnsubscribeRoute
   '/_user/profile': typeof UserProfileRoute
   '/_user/submit-friend-link': typeof UserSubmitFriendLinkRoute
@@ -260,9 +287,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-link'
     | '/verify-email'
+    | '/about'
     | '/friend-links'
+    | '/lab'
     | '/posts'
     | '/search'
+    | '/tech-stack'
     | '/unsubscribe'
     | '/profile'
     | '/submit-friend-link'
@@ -284,9 +314,12 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-link'
     | '/verify-email'
+    | '/about'
     | '/friend-links'
+    | '/lab'
     | '/posts'
     | '/search'
+    | '/tech-stack'
     | '/unsubscribe'
     | '/profile'
     | '/submit-friend-link'
@@ -313,9 +346,12 @@ export interface FileRouteTypes {
     | '/_auth/register'
     | '/_auth/reset-link'
     | '/_auth/verify-email'
+    | '/_public/about'
     | '/_public/friend-links'
+    | '/_public/lab'
     | '/_public/posts'
     | '/_public/search'
+    | '/_public/tech-stack'
     | '/_public/unsubscribe'
     | '/_user/profile'
     | '/_user/submit-friend-link'
@@ -412,6 +448,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicUnsubscribeRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/tech-stack': {
+      id: '/_public/tech-stack'
+      path: '/tech-stack'
+      fullPath: '/tech-stack'
+      preLoaderRoute: typeof PublicTechStackRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/search': {
       id: '/_public/search'
       path: '/search'
@@ -426,11 +469,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicPostsRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/lab': {
+      id: '/_public/lab'
+      path: '/lab'
+      fullPath: '/lab'
+      preLoaderRoute: typeof PublicLabRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/friend-links': {
       id: '/_public/friend-links'
       path: '/friend-links'
       fullPath: '/friend-links'
       preLoaderRoute: typeof PublicFriendLinksRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/about': {
+      id: '/_public/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicAboutRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_auth/verify-email': {
@@ -555,18 +612,24 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface PublicRouteRouteChildren {
+  PublicAboutRoute: typeof PublicAboutRoute
   PublicFriendLinksRoute: typeof PublicFriendLinksRoute
+  PublicLabRoute: typeof PublicLabRoute
   PublicPostsRoute: typeof PublicPostsRoute
   PublicSearchRoute: typeof PublicSearchRoute
+  PublicTechStackRoute: typeof PublicTechStackRoute
   PublicUnsubscribeRoute: typeof PublicUnsubscribeRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicPostSlugRoute: typeof PublicPostSlugRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicAboutRoute: PublicAboutRoute,
   PublicFriendLinksRoute: PublicFriendLinksRoute,
+  PublicLabRoute: PublicLabRoute,
   PublicPostsRoute: PublicPostsRoute,
   PublicSearchRoute: PublicSearchRoute,
+  PublicTechStackRoute: PublicTechStackRoute,
   PublicUnsubscribeRoute: PublicUnsubscribeRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicPostSlugRoute: PublicPostSlugRoute,

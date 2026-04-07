@@ -3,64 +3,62 @@ import {
   resolveSocialHref,
   SOCIAL_PLATFORMS,
 } from "@/features/config/utils/social-platforms";
-import type { NavOption } from "@/features/theme/contract/layouts";
 import { m } from "@/paraglide/messages";
 
-interface FooterProps {
-  navOptions: Array<NavOption>;
-}
-
-export function Footer({ navOptions }: FooterProps) {
+export function Footer() {
   const { siteConfig } = useRouteContext({ from: "__root__" });
+  const github = siteConfig.social.find(
+    (link) => link.platform === "github" && link.url,
+  );
+  const email = siteConfig.social.find(
+    (link) => link.platform === "email" && link.url,
+  );
 
   return (
-    <footer className="border-t border-border/40 bg-background/50 py-16 mt-32">
-      <div className="max-w-3xl mx-auto px-6 md:px-0 flex flex-col md:flex-row justify-between items-center gap-8">
-        {/* Brand / Copyright */}
-        <div className="flex flex-col items-center md:items-start gap-2">
-          <span className="font-serif text-lg font-bold tracking-tighter text-foreground">
-            [ {siteConfig.theme.default.navBarName} ]
-          </span>
-          <span className="font-mono text-[10px] text-muted-foreground tracking-widest uppercase">
+    <footer className="py-16 mt-24">
+      <div className="max-w-3xl mx-auto px-6 md:px-0 flex flex-col items-center gap-4 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2">
+          {github && (
+            <>
+              <a
+                href={resolveSocialHref(github.platform, github.url)}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                {SOCIAL_PLATFORMS.github.label}
+              </a>
+              <span className="opacity-40">|</span>
+            </>
+          )}
+          {email && (
+            <>
+              <a
+                href={resolveSocialHref(email.platform, email.url)}
+                className="hover:text-foreground transition-colors"
+              >
+                {SOCIAL_PLATFORMS.email.label}
+              </a>
+              <span className="opacity-40">|</span>
+            </>
+          )}
+          <Link
+            to="/tech-stack"
+            className="hover:text-foreground transition-colors"
+          >
+            {m.nav_tech_stack()}
+          </Link>
+        </div>
+
+        <div className="text-center space-y-1">
+          <p>
             {m.footer_copyright({
               year: new Date().getFullYear().toString(),
               author: siteConfig.author,
             })}
-          </span>
+          </p>
+          <p>{m.footer_tagline()}</p>
         </div>
-
-        {/* Minimalist Links */}
-        <nav className="flex items-center gap-8 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/60">
-          {navOptions.map((option) => (
-            <Link
-              key={option.id}
-              to={option.to}
-              className="hover:text-foreground transition-colors"
-            >
-              {option.label}
-            </Link>
-          ))}
-          {siteConfig.social
-            .filter((link) => link.url)
-            .map((link, i) => {
-              const href = resolveSocialHref(link.platform, link.url);
-              const label =
-                link.platform !== "custom"
-                  ? SOCIAL_PLATFORMS[link.platform].label
-                  : (link.label ?? "");
-              return (
-                <a
-                  key={`${link.platform}-${i}`}
-                  href={href}
-                  target={link.platform === "email" ? undefined : "_blank"}
-                  rel={link.platform === "email" ? undefined : "noreferrer"}
-                  className="hover:text-foreground transition-colors"
-                >
-                  {label}
-                </a>
-              );
-            })}
-        </nav>
       </div>
     </footer>
   );

@@ -1,73 +1,65 @@
 import { Link } from "@tanstack/react-router";
-import { Eye, Pin } from "lucide-react";
+import { Pin } from "lucide-react";
 import { memo } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { PostItem as PostItemType } from "@/features/posts/schema/posts.schema";
-import { formatDate } from "@/lib/utils";
-import { m } from "@/paraglide/messages";
+import { cn, formatDate } from "@/lib/utils";
 
 interface PostItemProps {
   post: PostItemType;
   pinned?: boolean;
-  views?: number;
-  isLoadingViews?: boolean;
+  compact?: boolean;
 }
 
 export const PostItem = memo(
-  ({ post, pinned, views, isLoadingViews }: PostItemProps) => {
+  ({ post, pinned, compact = false }: PostItemProps) => {
     return (
       <div className="group border-b border-border/40 last:border-0">
         <Link
           to="/post/$slug"
           params={{ slug: post.slug }}
-          className="block py-8 md:py-10 transition-all duration-300 hover:pl-4"
+          className={cn(
+            "block transition-all duration-300",
+            compact ? "py-6 md:py-7" : "py-8 md:py-10",
+          )}
         >
           <div className="flex flex-col gap-3">
             {/* Metadata Row */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-mono text-muted-foreground/60 tracking-wider">
+            <div
+              className={cn(
+                "flex flex-wrap items-center justify-between gap-3 font-mono tracking-wider text-muted-foreground/60",
+                compact ? "text-[11px]" : "text-xs",
+              )}
+            >
+              {post.tags && post.tags.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="text-muted-foreground/60 whitespace-nowrap"
+                    >
+                      #{tag.name}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <span className="opacity-0 select-none">.</span>
+              )}
+
               <time
                 dateTime={post.publishedAt?.toISOString()}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap text-right opacity-70"
               >
                 {formatDate(post.publishedAt)}
               </time>
-              {post.tags && post.tags.length > 0 && (
-                <>
-                  <span className="opacity-30">/</span>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag.id}
-                        className="text-muted-foreground/60 whitespace-nowrap"
-                      >
-                        #{tag.name}
-                      </span>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {isLoadingViews ? (
-                <>
-                  <span className="opacity-30">/</span>
-                  <span className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground/60">
-                    <Eye size={12} />
-                    <Skeleton className="h-3 w-12 rounded bg-muted-foreground/20" />
-                  </span>
-                </>
-              ) : views !== undefined ? (
-                <>
-                  <span className="opacity-30">/</span>
-                  <span className="flex items-center gap-1.5 whitespace-nowrap text-muted-foreground/60">
-                    <Eye size={12} />
-                    {m.post_views_count({ count: views })}
-                  </span>
-                </>
-              ) : null}
             </div>
 
             <h3
-              className="text-2xl md:text-3xl font-serif font-medium text-foreground group-hover:text-foreground/70 transition-colors duration-300 flex items-center gap-3"
+              className={cn(
+                "font-serif font-medium text-foreground/95 group-hover:text-foreground/75 transition-colors duration-300 flex items-center gap-3",
+                compact
+                  ? "text-[1.1rem] md:text-[1.12rem] leading-7"
+                  : "text-2xl md:text-3xl",
+              )}
               style={{ viewTransitionName: `post-title-${post.slug}` }}
             >
               {pinned && (
@@ -80,7 +72,12 @@ export const PostItem = memo(
               <span className="line-clamp-2">{post.title}</span>
             </h3>
 
-            <p className="text-muted-foreground font-light leading-relaxed max-w-2xl line-clamp-2 text-sm md:text-base font-sans mt-1 group-hover:text-muted-foreground/80">
+            <p
+              className={cn(
+                "text-muted-foreground font-light leading-relaxed max-w-2xl line-clamp-2 font-sans mt-1 group-hover:text-muted-foreground/80",
+                compact ? "text-[13.5px] leading-6" : "text-sm md:text-base",
+              )}
+            >
               {post.summary}
             </p>
           </div>
