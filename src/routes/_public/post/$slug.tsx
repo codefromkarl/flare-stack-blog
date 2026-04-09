@@ -9,6 +9,7 @@ import { postBySlugQuery, relatedPostsQuery } from "@/features/posts/queries";
 import {
   buildArticleJsonLd,
   buildCanonicalUrl,
+  buildDefaultSocialImageUrl,
   canonicalLink,
 } from "@/lib/seo";
 
@@ -40,10 +41,12 @@ export const Route = createFileRoute("/_public/post/$slug")({
     return {
       post,
       authorName: siteConfig.author,
+      publisherName: siteConfig.title,
       canonicalHref: buildCanonicalUrl(
         domain,
         `/post/${encodeURIComponent(post.slug)}`,
       ),
+      socialImageUrl: buildDefaultSocialImageUrl(domain, siteConfig),
     };
   },
   head: ({ loaderData }) => {
@@ -63,6 +66,50 @@ export const Route = createFileRoute("/_public/post/$slug")({
         { property: "og:description", content: post?.summary ?? "" },
         { property: "og:type", content: "article" },
         { property: "og:url", content: canonicalHref },
+        {
+          property: "og:site_name",
+          content: loaderData?.publisherName ?? "",
+        },
+        ...(post?.publishedAt
+          ? [
+              {
+                property: "article:published_time",
+                content: new Date(post.publishedAt).toISOString(),
+              },
+            ]
+          : []),
+        ...(post?.updatedAt
+          ? [
+              {
+                property: "article:modified_time",
+                content: new Date(post.updatedAt).toISOString(),
+              },
+            ]
+          : []),
+        ...(loaderData?.socialImageUrl
+          ? [
+              {
+                property: "og:image",
+                content: loaderData.socialImageUrl,
+              },
+              {
+                name: "twitter:card",
+                content: "summary",
+              },
+              {
+                name: "twitter:title",
+                content: post?.title ?? "",
+              },
+              {
+                name: "twitter:description",
+                content: post?.summary ?? "",
+              },
+              {
+                name: "twitter:image",
+                content: loaderData.socialImageUrl,
+              },
+            ]
+          : []),
       ],
       links: [canonicalLink(canonicalHref)],
       scripts: post
@@ -72,6 +119,7 @@ export const Route = createFileRoute("/_public/post/$slug")({
               children: buildArticleJsonLd({
                 authorName: loaderData.authorName,
                 canonicalHref,
+                publisherName: loaderData.publisherName,
                 post,
               }),
             },

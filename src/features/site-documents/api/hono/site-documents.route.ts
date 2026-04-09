@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import {
   buildAtomXml,
   buildFeedJson,
+  buildLlmsTxt,
   buildRobotsTxt,
   buildRssXml,
   buildSitemapXml,
@@ -96,6 +97,12 @@ const asyncDocumentRoutes = [
     contentType: "application/atom+xml; charset=utf-8",
     cacheControl: SITE_DOCUMENT_CACHE_CONTROL.feed,
     build: buildAtomXml,
+  },
+  {
+    path: "/llms.txt",
+    contentType: "text/plain; charset=utf-8",
+    cacheControl: SITE_DOCUMENT_CACHE_CONTROL.llms,
+    build: buildLlmsTxt,
   },
   {
     path: "/site.webmanifest",

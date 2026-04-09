@@ -22,6 +22,21 @@ describe("resolveLoginRedirectTo", () => {
     );
   });
 
+  it("supports structured router search objects", () => {
+    const result = resolveLoginRedirectTo({
+      locationSearch: {
+        client_id: "my-client",
+        response_type: "code",
+        scope: "read:user",
+        state: "test",
+      },
+    });
+
+    expect(result).toBe(
+      "/oauth/consent?client_id=my-client&response_type=code&scope=read%3Auser&state=test",
+    );
+  });
+
   it("returns undefined when oauth params are incomplete", () => {
     const result = resolveLoginRedirectTo({
       locationSearch: "?client_id=my-client",
