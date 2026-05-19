@@ -15,8 +15,9 @@
  *   - wrangler CLI 已登录且有 blog-db 的写入权限
  *   - 项目依赖已安装 (bun install)
  */
-import { readFileSync, writeFileSync } from "node:fs";
+
 import { execSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const CWD = process.cwd();
 const DOC_PATH =
@@ -134,7 +135,10 @@ VALUES (
   try {
     for (const key of ["ver:posts:list", "ver:posts:detail"]) {
       const getCmd = `wrangler kv key get ${KV_ID} "${key}"`;
-      const currentStr = execSync(getCmd, { encoding: "utf-8", cwd: CWD }).trim();
+      const currentStr = execSync(getCmd, {
+        encoding: "utf-8",
+        cwd: CWD,
+      }).trim();
       const current = currentStr ? Number.parseInt(currentStr) || 1 : 1;
       const next = current + 1;
       execSync(`wrangler kv key put ${KV_ID} "${key}" ${next}`, {

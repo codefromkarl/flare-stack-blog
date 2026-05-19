@@ -8,6 +8,7 @@ import type {
 import type {
   AboutPageProps,
   ForgotPasswordPageProps,
+  ProjectsPageProps,
   FriendLinksPageProps,
   HomePageProps,
   LoginPageProps,
@@ -86,6 +87,9 @@ export interface ThemeComponents {
 
   /** 关于页组件 */
   AboutPage: React.ComponentType<AboutPageProps>;
+
+  /** 个人项目页组件 */
+  ProjectsPage: React.ComponentType<ProjectsPageProps>;
 
   /** 技术栈页组件 */
   TechStackPage: React.ComponentType<TechStackPageProps>;

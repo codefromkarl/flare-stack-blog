@@ -57,10 +57,8 @@ type SocialImageSiteConfig = {
 
 type WebsiteJsonLdInput = {
   domain: string;
-  site: Pick<
-    SiteConfig,
-    "author" | "description" | "social" | "title"
-  > & SocialImageSiteConfig;
+  site: Pick<SiteConfig, "author" | "description" | "social" | "title"> &
+    SocialImageSiteConfig;
 };
 
 export function buildDefaultSocialImageUrl(
@@ -83,7 +81,10 @@ export function buildWebsiteJsonLd({ domain, site }: WebsiteJsonLdInput) {
   const websiteId = `${homepageUrl}#website`;
   const imageUrl = buildDefaultSocialImageUrl(domain, site);
   const sameAs = site.social
-    .filter((link) => link.url && link.platform !== "email" && link.platform !== "rss")
+    .filter(
+      (link) =>
+        link.url && link.platform !== "email" && link.platform !== "rss",
+    )
     .map((link) => resolveSocialHref(link.platform, link.url))
     .map((url) => (url.startsWith("/") ? buildCanonicalUrl(domain, url) : url));
 

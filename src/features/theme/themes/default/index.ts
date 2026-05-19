@@ -69,6 +69,11 @@ const TechStackPage = lazy(() =>
     default: module.TechStackPage,
   })),
 );
+const ProjectsPage = lazy(() =>
+  import("./pages/projects/page").then((module) => ({
+    default: module.ProjectsPage,
+  })),
+);
 const ProfilePage = lazy(() =>
   import("./pages/user/profile").then((module) => ({
     default: module.ProfilePage,
@@ -94,6 +99,7 @@ export default {
   FriendLinksPage,
   FriendLinksPageSkeleton,
   AboutPage,
+  ProjectsPage,
   TechStackPage,
   SearchPage,
   SubmitFriendLinkPage,

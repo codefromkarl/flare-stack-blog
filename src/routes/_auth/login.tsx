@@ -6,8 +6,8 @@ import {
 import theme from "@theme";
 import { z } from "zod";
 import { Turnstile, useTurnstile } from "@/components/common/turnstile";
-import { resolveLoginRedirectTo } from "@/features/auth/hooks/resolve-login-redirect-to";
 import { useLoginForm, useSocialLogin } from "@/features/auth/hooks";
+import { resolveLoginRedirectTo } from "@/features/auth/hooks/resolve-login-redirect-to";
 import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_auth/login")({

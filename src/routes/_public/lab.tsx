@@ -6,5 +6,5 @@ export const Route = createFileRoute("/_public/lab")({
 });
 
 function LabPage() {
-  return <theme.AboutPage />;
+  return <theme.ProjectsPage />;
 }

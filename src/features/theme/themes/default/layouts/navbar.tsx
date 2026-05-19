@@ -1,5 +1,6 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { Search, UserIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { NavOption, UserInfo } from "@/features/theme/contract/layouts";
@@ -19,27 +20,45 @@ export function Navbar({
   isLoading,
 }: NavbarProps) {
   const { siteConfig } = useRouteContext({ from: "__root__" });
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
-      <header className="relative z-40 py-6">
-        <div className="max-w-3xl mx-auto w-full px-6 md:px-0 flex items-center justify-between">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-background/80 backdrop-blur-xl border-b border-border/40 shadow-sm"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-3xl mx-auto w-full px-6 md:px-0 flex items-center justify-between h-16">
           {/* Left: Brand */}
-          <Link to="/" className="group select-none">
-            <span className="font-serif text-xl font-bold tracking-tighter text-foreground transition-colors group-hover:text-muted-foreground">
+          <Link to="/" className="group select-none flex items-center gap-2">
+            <span className="w-7 h-7 rounded-lg bg-brand text-brand-foreground flex items-center justify-center text-xs font-bold font-mono">
+              K
+            </span>
+            <span className="font-serif text-lg font-bold tracking-tight text-foreground transition-colors group-hover:text-brand">
               {siteConfig.theme.default.navBarName}
             </span>
           </Link>
 
           {/* Center: Main Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-1">
             {navOptions.map((option) => (
               <Link
                 key={option.id}
                 to={option.to}
-                className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground/65 hover:text-slate-500 dark:hover:text-slate-300 transition-colors"
+                className="relative px-3 py-1.5 text-[13px] font-medium text-muted-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-brand-subtle"
                 activeProps={{
-                  className: "!text-foreground",
+                  className: "!text-brand bg-brand-subtle",
                 }}
               >
                 {option.label}
@@ -48,25 +67,23 @@ export function Navbar({
           </nav>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <ThemeToggle />
-              <LanguageSwitcher className="text-muted-foreground hover:text-foreground h-8 w-8" />
-              <Link
-                to="/search"
-                className="text-muted-foreground hover:text-foreground h-8 w-8 flex items-center justify-center transition-colors"
-                aria-label={m.nav_search()}
-              >
-                <Search
-                  size={16}
-                  strokeWidth={1.5}
-                  style={{ viewTransitionName: "search-input" }}
-                />
-              </Link>
-            </div>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <LanguageSwitcher className="text-muted-foreground hover:text-foreground h-8 w-8" />
+            <Link
+              to="/search"
+              className="text-muted-foreground hover:text-foreground h-8 w-8 flex items-center justify-center transition-colors rounded-md hover:bg-brand-subtle"
+              aria-label={m.nav_search()}
+            >
+              <Search
+                size={16}
+                strokeWidth={1.5}
+                style={{ viewTransitionName: "search-input" }}
+              />
+            </Link>
 
             {/* Profile / Menu Toggle */}
-            <div className="flex items-center gap-3 pl-3">
+            <div className="flex items-center gap-2 pl-2 border-l border-border/40 ml-1">
               <div className="hidden md:flex items-center">
                 {isLoading ? (
                   <Skeleton className="w-8 h-8 rounded-full" />
@@ -76,7 +93,7 @@ export function Navbar({
                       <>
                         <Link
                           to="/profile"
-                          className="w-7 h-7 rounded-full overflow-hidden border border-border/60 hover:border-border transition-colors relative z-10"
+                          className="w-8 h-8 rounded-full overflow-hidden border border-border/60 hover:border-brand transition-colors relative z-10"
                           style={{ viewTransitionName: "user-avatar" }}
                         >
                           {user.image ? (
@@ -86,10 +103,10 @@ export function Navbar({
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <div className="w-full h-full bg-brand-muted flex items-center justify-center">
                               <UserIcon
-                                size={12}
-                                className="text-muted-foreground"
+                                size={14}
+                                className="text-brand-foreground"
                               />
                             </div>
                           )}
@@ -98,7 +115,7 @@ export function Navbar({
                     ) : (
                       <Link
                         to="/login"
-                        className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 rounded-md hover:bg-brand-subtle"
                       >
                         {m.nav_login()}
                       </Link>
@@ -108,7 +125,7 @@ export function Navbar({
               </div>
 
               <button
-                className="w-8 h-8 flex flex-col items-center justify-center gap-1.5 group lg:hidden"
+                className="w-8 h-8 flex flex-col items-center justify-center gap-1.5 group lg:hidden rounded-md hover:bg-brand-subtle transition-colors"
                 onClick={onMenuClick}
                 aria-label={m.common_open_menu()}
                 type="button"
@@ -120,6 +137,8 @@ export function Navbar({
           </div>
         </div>
       </header>
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
     </>
   );
 }

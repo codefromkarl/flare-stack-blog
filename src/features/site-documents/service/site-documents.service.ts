@@ -233,10 +233,7 @@ export function renderLlmsTxt({
   return `${lines.join("\n")}\n`;
 }
 
-export async function buildLlmsTxt(
-  env: Env,
-  executionCtx: ExecutionContext,
-) {
+export async function buildLlmsTxt(env: Env, executionCtx: ExecutionContext) {
   const site = await ConfigService.getSiteConfig({
     env,
     db: getDb(env),

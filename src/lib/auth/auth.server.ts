@@ -21,9 +21,13 @@ function buildTrustedOrigins(baseUrl: string) {
   }
 
   if (base.hostname === "localhost") {
-    trustedOrigins.add(`${base.protocol}//127.0.0.1${base.port ? `:${base.port}` : ""}`);
+    trustedOrigins.add(
+      `${base.protocol}//127.0.0.1${base.port ? `:${base.port}` : ""}`,
+    );
   } else if (base.hostname === "127.0.0.1") {
-    trustedOrigins.add(`${base.protocol}//localhost${base.port ? `:${base.port}` : ""}`);
+    trustedOrigins.add(
+      `${base.protocol}//localhost${base.port ? `:${base.port}` : ""}`,
+    );
   }
 
   return [...trustedOrigins];
