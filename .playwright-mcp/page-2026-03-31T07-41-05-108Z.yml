@@ -1,0 +1,70 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "导航栏名称" [ref=e5] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - button "主题：跟随系统" [ref=e8] [cursor=pointer]:
+              - img [ref=e11]
+            - button "切换语言" [ref=e14] [cursor=pointer]:
+              - img [ref=e15]
+              - img [ref=e19]
+            - link "搜索" [ref=e21] [cursor=pointer]:
+              - /url: /search
+              - img [ref=e22]
+          - button "打开菜单" [ref=e28] [cursor=pointer]
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic: "[ 导航栏名称 ]"
+          - button:
+            - img
+        - navigation:
+          - link ">_ Home":
+            - /url: /
+            - generic: ">_"
+            - generic: Home
+          - link ">_ Posts":
+            - /url: /posts
+            - generic: ">_"
+            - generic: Posts
+          - link ">_ About":
+            - /url: /about
+            - generic: ">_"
+            - generic: About
+          - link ">_ Tech Stack":
+            - /url: /tech-stack
+            - generic: ">_"
+            - generic: Tech Stack
+        - generic:
+          - link "$ 登录":
+            - /url: /login
+            - generic: $ 登录
+    - main [ref=e31]:
+      - generic [ref=e32]:
+        - button "浏览索引" [ref=e34] [cursor=pointer]:
+          - img [ref=e35]
+          - generic [ref=e36]: 浏览索引
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - heading "文章" [level=1] [ref=e40]
+            - paragraph [ref=e41]: 这是我的个人网站和博客。在这里，我主要分享与技术和生活相关的内容。欢迎阅读！
+          - paragraph [ref=e43]: 暂无文章
+    - contentinfo [ref=e45]:
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - link "GitHub" [ref=e48] [cursor=pointer]:
+            - /url: https://github.com/example
+          - generic [ref=e49]: "|"
+          - link "Email" [ref=e50] [cursor=pointer]:
+            - /url: mailto:example@email.com
+          - generic [ref=e51]: "|"
+          - link "技术栈 ✨" [ref=e52] [cursor=pointer]:
+            - /url: /tech-stack
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: © 2026 作者. All Rights Reserved.
+          - paragraph [ref=e55]: 极简分享，真诚成长
+  - region "Notifications alt+T"

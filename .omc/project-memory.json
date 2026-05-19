@@ -1,0 +1,342 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1775720123598,
+  "projectRoot": "/home/yuanzhi/Develop/ai-research/flare-stack-blog",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "19.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "7.1.7",
+        "category": "build"
+      },
+      {
+        "name": "vitest",
+        "version": "3.2.0",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm test",
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite dev --port 3000",
+      "build": "bun scripts/generate-manifest.ts && vite build",
+      "deploy": "bun db:migrate && wrangler deploy",
+      "serve": "vite preview",
+      "test": "vitest run",
+      "test:node": "vitest run --config vitest.node.config.ts",
+      "lint": "biome lint",
+      "lint:fix": "biome check --write",
+      "format": "biome format --write",
+      "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile .cache/typecheck.tsbuildinfo",
+      "check": "biome check --write && bun typecheck",
+      "i18n:compile": "bun paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
+      "i18n:verify": "bun scripts/verify-translations.ts",
+      "i18n:prune-unused": "bun scripts/prune-unused-translations.ts",
+      "wrangler:prepare": "bun scripts/prepare-wrangler-config.ts",
+      "cf-typegen": "wrangler types --env-interface Env",
+      "db:studio": "drizzle-kit studio",
+      "db:push": "drizzle-kit push",
+      "db:generate": "drizzle-kit generate",
+      "db:migrate": "bun scripts/safe-d1-migrate/main.ts",
+      "db:migrate:local": "bun scripts/safe-d1-migrate/main.ts --local",
+      "db:migrate:unsafe": "wrangler d1 migrations apply DB --remote",
+      "auth:generate-schema": "bunx @better-auth/cli generate --config auth-cli.ts --output src/lib/db/schema/auth.table.ts",
+      "mcp:inspect": "bunx -y @modelcontextprotocol/inspector",
+      "create-theme": "bun scripts/create-theme.ts",
+      "release": "export GITHUB_TOKEN=$(gh auth token) && release-it",
+      "prepare": "husky"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": "feature-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "public",
+      "scripts",
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 0,
+      "lastAccessed": 1775720123576,
+      "keyFiles": []
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 9,
+      "lastAccessed": 1775720123577,
+      "keyFiles": [
+        "CONTRIBUTING.en.md",
+        "README.en.md",
+        "deployment-guide.en.md",
+        "error-handling-quickstart.en.md",
+        "error-handling-quickstart.md"
+      ]
+    },
+    "messages": {
+      "path": "messages",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1775720123587,
+      "keyFiles": [
+        "en.json",
+        "zh.json"
+      ]
+    },
+    "migrations": {
+      "path": "migrations",
+      "purpose": "Database migrations",
+      "fileCount": 11,
+      "lastAccessed": 1775720123588,
+      "keyFiles": [
+        "0000_breezy_pretty_boy.sql",
+        "0001_flawless_black_queen.sql",
+        "0002_flimsy_sentry.sql",
+        "0003_zippy_luminals.sql",
+        "0004_slim_tinkerer.sql"
+      ]
+    },
+    "project.inlang": {
+      "path": "project.inlang",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1775720123591,
+      "keyFiles": [
+        "README.md",
+        "settings.json"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 7,
+      "lastAccessed": 1775720123592,
+      "keyFiles": [
+        "apple-touch-icon.png",
+        "favicon-96x96.png",
+        "favicon.ico",
+        "favicon.svg",
+        "katex.min.css"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 5,
+      "lastAccessed": 1775720123592,
+      "keyFiles": [
+        "create-theme.ts",
+        "generate-manifest.ts",
+        "prepare-wrangler-config.ts",
+        "prune-unused-translations.ts",
+        "verify-translations.ts"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 6,
+      "lastAccessed": 1775720123592,
+      "keyFiles": [
+        "blog.config.ts",
+        "routeTree.gen.ts",
+        "router.tsx",
+        "server.ts",
+        "start.ts"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 3,
+      "lastAccessed": 1775720123593,
+      "keyFiles": [
+        "apply-migrations.ts",
+        "env.d.ts",
+        "test-utils.ts"
+      ]
+    },
+    "tmp": {
+      "path": "tmp",
+      "purpose": null,
+      "fileCount": 24,
+      "lastAccessed": 1775720123594,
+      "keyFiles": [
+        "admin-redirect-login.png",
+        "console.log",
+        "d1-migrate-after-20260330T161720Z.json",
+        "dev-server-fix.log",
+        "dev-server.log"
+      ]
+    },
+    "docs/assets": {
+      "path": "docs/assets",
+      "purpose": "Static assets",
+      "fileCount": 3,
+      "lastAccessed": 1775720123595,
+      "keyFiles": [
+        "admin.png",
+        "fuwari.png",
+        "home.png"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 1,
+      "lastAccessed": 1775720123596,
+      "keyFiles": [
+        "breadcrumbs.tsx"
+      ]
+    },
+    "src/lib": {
+      "path": "src/lib",
+      "purpose": "Library code",
+      "fileCount": 11,
+      "lastAccessed": 1775720123597,
+      "keyFiles": [
+        "api-client.ts",
+        "constants.ts",
+        "durable-objects.integration.test.ts"
+      ]
+    },
+    "src/routes": {
+      "path": "src/routes",
+      "purpose": "Route handlers",
+      "fileCount": 1,
+      "lastAccessed": 1775720123597,
+      "keyFiles": [
+        "__root.tsx"
+      ]
+    },
+    "tests/mocks": {
+      "path": "tests/mocks",
+      "purpose": "Mock data",
+      "fileCount": 1,
+      "lastAccessed": 1775720123598,
+      "keyFiles": [
+        "tanstack-start-mock.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "messages/zh.json",
+      "accessCount": 3,
+      "lastAccessed": 1775722858607,
+      "type": "directory"
+    },
+    {
+      "path": "messages/en.json",
+      "accessCount": 3,
+      "lastAccessed": 1775722858882,
+      "type": "directory"
+    },
+    {
+      "path": "src/features/theme/themes/fuwari/pages/tech-stack/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1775722918966,
+      "type": "file"
+    },
+    {
+      "path": "src/features/theme/themes/default/pages/tech-stack/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1775722919228,
+      "type": "file"
+    },
+    {
+      "path": "src/paraglide/messages",
+      "accessCount": 2,
+      "lastAccessed": 1775723112092,
+      "type": "directory"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1775721536519,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/_public/about.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1775722388537,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/_public/route.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1775722402393,
+      "type": "file"
+    },
+    {
+      "path": "src/features/theme/themes/fuwari/pages/about/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1775722438976,
+      "type": "file"
+    },
+    {
+      "path": "src/features/theme/themes/default/pages/about/index.ts",
+      "accessCount": 1,
+      "lastAccessed": 1775722438987,
+      "type": "file"
+    },
+    {
+      "path": "src/features/theme/contract/pages.ts",
+      "accessCount": 1,
+      "lastAccessed": 1775722526200,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

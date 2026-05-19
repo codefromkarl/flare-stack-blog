@@ -14,6 +14,12 @@ function buildTrustedOrigins(baseUrl: string) {
   const base = new URL(baseUrl);
   trustedOrigins.add(base.origin);
 
+  // 跨子域 SSO：信任同一根域下的子域应用
+  if (base.hostname !== "localhost" && base.hostname !== "127.0.0.1") {
+    const rootDomain = base.hostname.split(".").slice(-2).join(".");
+    trustedOrigins.add(`https://travel.${rootDomain}`);
+  }
+
   if (base.hostname === "localhost") {
     trustedOrigins.add(`${base.protocol}//127.0.0.1${base.port ? `:${base.port}` : ""}`);
   } else if (base.hostname === "127.0.0.1") {

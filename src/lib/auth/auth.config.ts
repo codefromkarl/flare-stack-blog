@@ -13,6 +13,12 @@ export function createAuthConfig() {
         maxAge: 5 * 60,
       },
     },
+    advanced: {
+      crossSubDomainCookies: {
+        enabled: true,
+        domain: "codefromkarl.xyz",
+      },
+    },
     plugins: [admin()],
   } satisfies BetterAuthOptions;
 }

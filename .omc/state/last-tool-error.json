@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"rtk grep -oP '<script type=\\\"application/ld\\\\+json\\\">[^<]+</script>' /tmp/geo-homepage.html\",\"description\":\"Extract JSON-LD structured data\"}",
+  "error": "Exit code 1",
+  "timestamp": "2026-04-09T08:38:28.234Z",
+  "retry_count": 1
+}

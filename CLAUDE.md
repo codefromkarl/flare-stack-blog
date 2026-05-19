@@ -89,3 +89,26 @@ console.error(
   JSON.stringify({ message: "request failed", error: String(error) }),
 );
 ```
+
+## Publishing Docs as Blog Posts
+
+Markdown files in `docs/` can be published as blog posts via CLI, bypassing the admin UI:
+
+```bash
+bun run scripts/publish-doc.ts                     # Publish default doc
+DOC_PATH=docs/how-to-deploy.md bun run scripts/publish-doc.ts  # Publish specific file
+```
+
+**How it works:**
+1. Run `bun` on the script (has access to blog's ESM imports)
+2. Script uses `markdownToJsonContent()` to convert Markdown → TipTap JSON
+3. Uses `highlightCodeBlocks()` for code syntax highlighting
+4. Inserts directly into production D1 via `wrangler d1 execute --remote`
+5. Status set to `published` immediately — no manual publish step needed
+
+**Prerequisites:**
+- `wrangler` CLI must be authenticated (`wrangler whoami`)
+- Must have write access to `blog-db` D1 database
+- Must run from project root (`CWD = flare-stack-blog/`)
+
+**Do NOT use** the browser-based admin panel for routine publishing — the CLI path is faster, skips GitHub OAuth login, and reuses existing conversion utilities.
