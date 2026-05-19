@@ -70,6 +70,9 @@ describe("buildArticleJsonLd", () => {
       "@type": "Organization",
       name: "CodeFromKarl",
     });
-    expect(payload.keywords).toEqual(["AI Engineering", "Context Engineering"]);
+    expect(payload.keywords).toEqual([
+      "AI Engineering",
+      "Context Engineering",
+    ]);
   });
 });

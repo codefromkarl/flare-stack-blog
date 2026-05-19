@@ -13,7 +13,10 @@ import { siteConfigQuery, siteDomainQuery } from "@/features/config/queries";
 import { useWebVitals } from "@/hooks/use-web-vitals";
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import { clientEnv } from "@/lib/env/client.env";
-import { buildDefaultSocialImageUrl, buildWebsiteJsonLd } from "@/lib/seo";
+import {
+  buildDefaultSocialImageUrl,
+  buildWebsiteJsonLd,
+} from "@/lib/seo";
 import { getLocale } from "@/paraglide/runtime";
 import appCss from "@/styles.css?url";
 

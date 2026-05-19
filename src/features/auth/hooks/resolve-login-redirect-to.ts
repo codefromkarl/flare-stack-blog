@@ -7,10 +7,7 @@ function normalizeSearchParams(
     return new URLSearchParams();
   }
 
-  if (
-    typeof locationSearch === "string" ||
-    locationSearch instanceof URLSearchParams
-  ) {
+  if (typeof locationSearch === "string" || locationSearch instanceof URLSearchParams) {
     return new URLSearchParams(locationSearch);
   }
 
